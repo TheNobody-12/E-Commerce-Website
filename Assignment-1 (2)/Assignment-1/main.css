@@ -1,0 +1,54 @@
+<!-- I, Shreya Jadawala, student number 000873690, certify that this material is my original work. No other person's work has been used without due acknowledgment and I have not made my work available to anyone else. -->
+.grid-container-header{
+    display : grid;
+    grid-template-columns: 80% 20%;
+    background-color: pink;
+    padding: 10px;
+}
+.grid-item-header{
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid black;
+    padding: 20px;
+    font-size : 65px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 20% 60% 20% ;
+    background-color: #2196F3;
+    padding: 10px;
+  }
+  
+.grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bolder;
+  }
+  .grid-item-catalog{
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bolder;
+  }
+  .image{
+    padding: 10px;
+    align-items: center;
+    justify-items: center;
+  }
+  .row{
+    padding: 10px;
+    background-color: whitesmoke ;
+  }
+  /* .grid-body{
+    display: ;
+  } */

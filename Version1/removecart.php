@@ -2,22 +2,22 @@
 <?php
 // remove from cart
 include_once "file_storage.php";
-include_once "create_datafile.php";
-$filename = 'cart.json';
-$data = readDataFile($filename);
-// get product id from url
 $product_id = $_GET['product_id'];
-// find product in data
-foreach ($data as $key => $product) {
-    if ($product['product_id'] == $product_id) {
-        // remove product from cart
-        unset($data[$key]);
-        // write cart to file
-        $cart_filename = 'cart.json';
-        writeDataFile($cart_filename, $data);
-        // redirect to cart page
-        header("Location: cart.php");
-        exit;
-    }
+// connect to mysql
+$servername = "localhost";
+$username ="root";
+$password = "";
+$dbname = "e-web";
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+// remove data from mysql
+$sql = "DELETE FROM `cart` WHERE prod_id = '$product_id' ";
+// fetch data from mysql
+$result = $conn->query($sql);
+header("Location: cart.php");
+$conn->close();
 ?>

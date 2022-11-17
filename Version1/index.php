@@ -39,7 +39,7 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-cart-shopping"></i><sup>1</sup></a>
+                        <a class="nav-link" href="mainCart.php"><i class="fa-solid fa-cart-shopping"></i><sup>1</sup></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Total Price</a>
@@ -87,87 +87,61 @@
         </div>
         <div class="col-md-7">
             <!-- Products -->
-
             <div class="row">
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-info">ADD TO CART</a>
+                <!-- Repeat card for each prodcut in sql database php -->
+                <?php
+                include_once "file_storage.php";
+                // connect to mysql
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "e-web";
+                // Create connection
+                $conn = new mysqli($servername, $username, $password, $dbname);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+                // echo "Connected successfully";
+                // get products from database
+                $sql = "SELECT * FROM catelogs";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<div class='col-md-4'>
+                        <div class='card'>
+                            <img src='" . $row["product_id"] . "' class='card-img-top' alt='...'>
+                            <div class='card-body'>
+                                <h5 class='card-title
+                                '>" . $row["product_name"] . "</h5>
+                                <p class='card-text'>" . $row["product description"] . "</p>
+                                <a href='addcart.php?product_id=".$row['product_id']."' class='btn btn-primary'>Add to cart</a>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 p-1">
-                    <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                                of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
+                    </div>";
+                    }
+                } else {
+                    echo "0 results";
+                }
+                $conn->close();
+                ?>
             </div>
         </div>
-        <div class="col-md bg-secondary">
-            <!-- Cart -->
-            <h1>Cart</h1>
-            <ul>
-                <li>Cart 1</li>
-                <li>Cart 2</li>
-                <li>Cart 3</li>
-                <li>Cart 4</li>
-                <li>Cart 5</li>
-            </ul>
+        <div class="col-md-3">
+            <div class="row">
+            <div class="col">
+                <h2>ADD TO CART</h2>
+                <?php include 'cart.php'; ?>
+            </div>
         </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>
     </div>
 
 

@@ -1,24 +1,48 @@
-<?php
-// create link to index.php
-print "<a href='index.php'>Back to Products</a>";
-// read data from cart file
-include_once "file_storage.php";
-// include_once "create_datafile.php";
-// $data_file = 'myfilename.json';
-$filename = 'cart.json';
-$data = readDataFile($filename);
-// create table of products
-print "<table border='1'>";
-print "<tr><th>Product ID</th><th>Product Name</th><th>Product Price</th><th>Product Quantity</th><th>Remove from Cart</th></tr>";
-foreach ($data as $product) {
-        print "<tr>";
-        print "<td>".$product['product_id']."</td>";
-        print "<td>".$product['product_name']."</td>";
-        print "<td>".$product['product_price']."</td>";
-        print "<td>".$product['product_quantity']."</td>";
-        print "<td><a href='removecart.php?product_id=".$product['product_id']."'>Remove from Cart</a></td>";
-        print "</tr>";
-    }
-print "</table>";
-?>
-
+                <?php
+                include_once "file_storage.php";
+                // connect to mysql
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "e-web";
+                // Create connection
+                $conn = new mysqli($servername, $username, $password, $dbname);
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+                // echo "Connected successfully";
+                // get products from database
+                $sql = "SELECT * FROM cart";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        // table form of cart
+                        echo "<table class='table'>
+                        <thead>
+                            <tr>
+                                <th scope='col'>#</th>
+                                <th scope='col'>Product Name</th>
+                                <th scope='col'>Product Price</th>
+                                <th scope='col'>Product Quantity</th>
+                                <th scope='col'>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope='row'>" . $row["prod_id"] . "</th>
+                                <td>" . $row["prod_name"] . "</td>
+                                <td>" . $row["prod_price"] . "</td>
+                                <td>" . $row["prod_quantity"] . "</td>
+                                <td><a href='removecart.php?product_id=".$row['prod_id']."' class='btn btn-primary'>Remove</a></td>
+                            </tr>
+                        </tbody>
+                    </table>";
+                    
+                    }
+                } else {
+                    echo "0 results";
+                }
+                $conn->close();
+                ?>
