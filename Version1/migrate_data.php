@@ -1,5 +1,5 @@
 <?PHP
-$datafileName = 'C:\xampp\tmp\myfilename.json';
+$datafileName = 'myfilename.json';
 include_once "file_storage.php";
 $data = readDataFile($datafileName);
 $pdn = "mysql:database=mydatabase;host=localhost";
@@ -10,7 +10,7 @@ try {
 	$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 	$db->exec("USE mydatabase");
 	$db->exec("CREATE TABLE catalogue (product_id varchar(40),product_name varchar(100),product_description longtext,product_price float,product_category varchar(25),product_quantity int(11))");
-	$db->exec("CREATE TABLE session (session_id	varchar(64)	, session_data longtext)");
+	$db->exec("CREATE TABLE session (session_id varchar(40),product_id varchar(40),product_name varchar(100),product_price float,product_description longtext,product_quantity int(11))");
 	$cursor = $db->prepare('INSERT INTO catalogue (product_id,product_name,product_description,product_category,product_price,product_quantity)
 VALUES (:product_id,:product_name,:product_description,:product_category,:product_price,:product_quantity);');
 	foreach ($data as $item) {

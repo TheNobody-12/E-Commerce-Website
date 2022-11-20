@@ -12,13 +12,10 @@
 </head>
 
 <body>
-    <!-- navbar -->
-    <!-- <div class="container-fluid p-0"> -->
-
     </div>
     <nav class="navbar navbar-expand-lg bg-info">
         <div class="container-fluid p-0">
-            <img src="./image/logo.jpeg" alt="logo" style="width:7%;">
+            <img src="./Image/images.jpg" alt="logo" style="width:7%;">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -39,7 +36,8 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mainCart.php"><i class="fa-solid fa-cart-shopping"></i><sup>1</sup></a>
+                        <a class="nav-link" href="mainCart.php"><i
+                                class="fa-solid fa-cart-shopping"></i><sup>1</sup></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Total Price</a>
@@ -72,92 +70,99 @@
 
     <!-- fourth child -->
     <div class="row">
-        <div class="col-md-2 bg-secondary p-0">
+        <div class="col-md-1 bg-secondary p-0">
             <ul class="navbar-nav me-auto text-center">
                 <!-- Categories -->
                 <li class="nav-item bg-info">
-                    <a class="nav-link" href="#">  Categories</a>
+                    <a class="nav-link" href="#"> Categories</a>
                 </li>
-                <li>  Category 1</li>
-                <li>  Category 2</li>
-                <li>  Category 3</li>
-                <li>  Category 4</li>
-                <li>  Category 5</li>
+                <li> Category 1</li>
+                <li> Category 2</li>
+                <li> Category 3</li>
+                <li> Category 4</li>
+                <li> Category 5</li>
             </ul>
         </div>
         <div class="col-md-7">
             <!-- Products -->
             <div class="row">
-                <!-- Repeat card for each prodcut in sql database php -->
+                <!-- Repeat card for each prodcut in PDO database php -->
                 <?php
-                include_once "file_storage.php";
-                // connect to mysql
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "e-web";
-                // Create connection
-                $conn = new mysqli($servername, $username, $password, $dbname);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-                // echo "Connected successfully";
-                // get products from database
-                $sql = "SELECT * FROM catelogs";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    // output data of each row
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<div class='col-md-4'>
+                include_once "db.php";
+                $sql = "SELECT * FROM catalogue";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($products as $product) {
+                    echo "<div class='col-md-4'>
                         <div class='card'>
-                            <img src='" . $row["product_id"] . "' class='card-img-top' alt='...'>
+                            <img src='./Image/". $product["product_id"] .".webp' class='card-img-top' alt='...'>
                             <div class='card-body'>
-                                <h5 class='card-title
-                                '>" . $row["product_name"] . "</h5>
-                                <p class='card-text'>" . $row["product description"] . "</p>
-                                <a href='addcart.php?product_id=".$row['product_id']."' class='btn btn-primary'>Add to cart</a>
-                            </div>
+                                <h5 class='card-title'>" . $product["product_name"] . "</h5>
+                                <p class='card-text'>" . $product["product_id"] . "</p>
+                                <p class='card-text'>" . $product["product_description"] . "</p>
+                                <div class='input-group mb-3'>
+                                    <span class='input-group-text'>$</span>
+                                    <input type='text' class='form-control' aria-label='Amount (to the nearest dollar)'
+                                        value='" . $product["product_price"] . "'>
+                                    <span class='input-group-text'>.00</span>
+                                </div>
+                                <p class='card-text'>" . $product["product_category"] . "</p>";
+                                // if quantity is 0, print out sold out
+                                if ($product["product_quantity"] == 0) {
+                                    echo "Quantity: Out of Stock";
+                                    // disable add to cart 
+                                    echo "
+                                    // <button type='button' class='btn btn-primary' disabled>
+                                <a href='addcart.php?product_id=".$product['product_id']."'>Add to cart</a></button>
+                                </div>
                         </div>
                     </div>";
-                    }
-                } else {
-                    echo "0 results";
+                                } else {
+                                    echo "Quantity: " . $product["product_quantity"];
+                                    echo "
+                                <a href='addcart.php?product_id=".$product['product_id']."' class='btn btn-primary'>Add to cart</a>
+                                </div>
+                        </div>
+                    </div>";
+                                }
+                            
                 }
-                $conn->close();
+                exit();
                 ?>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="row">
-            <div class="col">
-                <h2>ADD TO CART</h2>
-                <?php include 'cart.php'; ?>
+                <div class="col">
+                    <h2>ADD TO CART</h2>
+                    <?php include 'cart.php'; ?>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-        crossorigin="anonymous"></script>
-</body>
-</html>
-    </div>
-
-
-
-
-    <!-- Last child -->
-    <div class="bg-info p-3 text-center">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet expedita nam dicta rem beatae et iure
-            praesentium temporibus nostrum ratione repellat, illum distinctio, blanditiis, similique maxime voluptatum
-            facere voluptatem mollitia!</p>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
     </script>
+</body>
+
+</html>
+</div>
+
+
+
+
+<!-- Last child -->
+<div class="bg-info p-3 text-center">
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet expedita nam dicta rem beatae et iure
+        praesentium temporibus nostrum ratione repellat, illum distinctio, blanditiis, similique maxime voluptatum
+        facere voluptatem mollitia!</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+</script>
 </body>
 
 </html>

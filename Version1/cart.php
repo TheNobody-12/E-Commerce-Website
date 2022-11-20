@@ -1,48 +1,36 @@
                 <?php
                 include_once "file_storage.php";
-                // connect to mysql
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "e-web";
-                // Create connection
-                $conn = new mysqli($servername, $username, $password, $dbname);
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-                // echo "Connected successfully";
-                // get products from database
-                $sql = "SELECT * FROM cart";
+                include_once "db.php";
+                // write query to fetch data from session table adn update product quantity if product is already in cart
+                $session_id = session_id();
+                $sql = "SELECT * FROM `session` WHERE session_id = '$session_id '";
                 $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    // output data of each row
-                    while ($row = $result->fetch_assoc()) {
-                        // table form of cart
-                        echo "<table class='table'>
-                        <thead>
-                            <tr>
-                                <th scope='col'>#</th>
-                                <th scope='col'>Product Name</th>
-                                <th scope='col'>Product Price</th>
-                                <th scope='col'>Product Quantity</th>
-                                <th scope='col'>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope='row'>" . $row["prod_id"] . "</th>
-                                <td>" . $row["prod_name"] . "</td>
-                                <td>" . $row["prod_price"] . "</td>
-                                <td>" . $row["prod_quantity"] . "</td>
-                                <td><a href='removecart.php?product_id=".$row['prod_id']."' class='btn btn-primary'>Remove</a></td>
-                            </tr>
-                        </tbody>
-                    </table>";
-                    
+                if ($result->rowCount() > 0) 
+                {
+                    foreach ($result as $row)
+                    {
+                        $product_id = $row['product_id'];
+                        $product_name = $row['product_name'];
+                        $product_price = $row['product_price'];
+                        $product_description = $row['product_description'];
+                        $product_quantity = $row['product_quantity'];
+                        $product_quantity = $product_quantity;
+                        // table
+                        print "<table border='1'>";
+                        print "<tr><th>Product ID</th><th>Product Name</th><th>Product Price</th><th>Product Description</th><th>Product Quantity</th><th>Remove From Cart</tr>";
+                        print "<tr>";
+                        print "<td><img src='Image/" . $product_id . ".webp' width='100' height='100'></td>";
+                        print "<td>" . $product_name . "</td>";
+                        print "<td>" . $product_price . "</td>";
+                        print "<td>" . $product_description . "</td>";
+                        print "<td>" . $product_quantity . "</td>";
+                        print "<td><a href='removecart.php?product_id=" . $product_id . "'>Remove From Cart</a></td>";
+                        print "</tr>";
+                        print "</table>";
                     }
                 } else {
                     echo "0 results";
                 }
-                $conn->close();
-                ?>
+                print "<a href='index.php'>Continue Shopping</a>";
+                exit();
+?>
